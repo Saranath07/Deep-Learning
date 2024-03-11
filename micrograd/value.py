@@ -1,4 +1,4 @@
-
+import math
 class Value:
     
 
@@ -37,6 +37,15 @@ class Value:
 
         def _backward():
             self.grad += (other * self.data**(other-1)) * out.grad
+        out._backward = _backward
+
+        return out
+    
+    def logistic(self):
+        out = Value(1 / (1 + math.exp(-self.data)), (self,), 'logistic')
+
+        def _backward():
+            self.grad += (math.exp(-self.data) / (1 + math.exp(-self.data))**2) * out.grad
         out._backward = _backward
 
         return out
@@ -89,3 +98,4 @@ class Value:
 
     def __repr__(self):
         return f"Value(data={self.data}, grad={self.grad})"
+
